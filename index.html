@@ -1,0 +1,232 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+  <title>Smart Shop</title>  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="./style.css">  
+
+  <!-- CHART.JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>  
+</head>  
+  
+<body>  
+  
+<!-- LOGIN -->  
+<div id="loginPage">  
+  <h2>Login</h2>  
+  <input id="email" type="email" placeholder="Email">  
+  <input id="password" type="password" placeholder="Password">  
+  <button type="button" onclick="login()">Login</button>  
+</div>  
+  
+<!-- APP -->  
+<div id="app" style="display:none">  
+  
+<div class="sidebar">  
+  <h2 id="shopName">My Shop</h2>  
+  
+  <a onclick="show('dashboard')">📊 Dashboard</a>  
+  <a onclick="show('workers')">👷 Workers</a>  
+  <a onclick="show('attendance')">📅 Attendance</a>  
+  <a onclick="show('stock')">📦 Stock</a>  
+  <a onclick="show('billing')">💰 Billing</a>  
+  <a onclick="show('quotation')">🧾 Quotation</a>  
+  <a onclick="show('ai')">🤖 AI Assistant</a>  
+  <a onclick="show('settings')">⚙ Settings</a>  
+</div>  
+  
+<div class="main">  
+  
+<!-- ================= DASHBOARD ================= -->
+<div id="dashboard" class="page">  
+  <h2>Dashboard</h2>  
+
+  <div id="offerBox" class="offer-box">
+    🎉 No Offer Available
+  </div>
+
+  <div class="dash-grid">
+
+    <div class="dash-card">Workers<br><span id="w"></span></div>  
+    <div class="dash-card">Stock Items<br><span id="s"></span></div>  
+    <div class="dash-card">Total Bills<br><span id="b"></span></div>  
+    <div class="dash-card">Revenue<br>₹<span id="r"></span></div>  
+
+    <div class="dash-card">Today's Sales<br><span id="todaySales"></span></div>  
+    <div class="dash-card">Total Orders<br><span id="orders"></span></div>  
+    <div class="dash-card">Customers<br><span id="customers"></span></div>  
+    <div class="dash-card low-stock">Low Stock<br><span id="lowStock"></span></div>  
+    <div class="dash-card highlight">Top Product<br><span id="topProduct"></span></div>  
+
+  </div>
+
+  <div class="chart-box">
+    <canvas id="salesChart" height="300"></canvas>  
+  </div>
+
+</div> 
+  
+<!-- ================= WORKERS ================= -->
+<div id="workers" class="page">  
+  <h2>Workers</h2>  
+
+  <div class="form-grid">
+    <input id="wname" placeholder="Name">  
+    <input id="salary" type="number" placeholder="Salary">  
+    <input id="role" placeholder="Role">  
+    <input id="age" type="number" placeholder="Age">
+    <input id="mobile" type="tel" placeholder="Mobile Number">
+    <input id="qualification" placeholder="Qualification">
+    <input id="address" placeholder="Address">
+    <input type="hidden" id="editId">
+  </div>
+
+  <button type="button" id="workerBtn" onclick="addWorker()">Add Worker</button>  
+  <div id="workerList"></div>  
+</div>
+  
+<!-- ================= ATTENDANCE ================= -->
+<div id="attendance" class="page">  
+  <h2>📅 Attendance</h2>  
+
+  
+  <div class="attendance-controls">
+    <label for="monthSelect"><b>Select Month:</b></label>
+    <input 
+      type="month" 
+      id="monthSelect"
+      onchange="loadAttendance()"
+    >
+  </div>
+
+
+  <div id="attendanceList"></div>  
+</div>
+<!-- ================= STOCK ================= -->
+<div id="stock" class="page">  
+  <h2>Stock</h2>  
+
+  <div class="form-grid">
+    <input id="n" placeholder="Product Name">  
+    <input id="q" type="number" placeholder="Quantity">  
+    <input id="price" type="number" placeholder="Price per unit">  
+    <input id="unit" placeholder="Unit (kg / pcs / litre)">  
+    <input id="expiry" type="date">  
+    <input type="hidden" id="editStockId">
+  </div>
+
+  <button type="button" id="stockBtn" onclick="addStock()">Add Stock</button>  
+  <div id="stockList"></div>  
+</div>
+  
+<!-- ================= BILLING ================= -->
+<div id="billing" class="page">
+
+  <h2>Billing</h2>
+
+  <div class="form-grid">
+    <input id="c" placeholder="Customer Name">
+    <input id="phone" type="tel" placeholder="Customer Contact Number">
+    <input type="hidden" id="editBillId">
+  </div>
+
+  <p>➕ Add products to create bill</p>
+
+  <div id="itemsContainer"></div>
+
+  <button type="button" onclick="addItemRow()">➕ Add Item</button>
+
+  <h3 id="billTotal"></h3>
+
+  <button type="button" id="billBtn" onclick="addBill()">Add Bill</button>
+
+  <div id="billList"></div>
+
+</div>
+
+<!-- ================= QUOTATION ================= -->
+<div id="quotation" class="page">  
+  <h2>Quotation</h2>  
+
+  <div class="form-grid">
+    <input id="qc" placeholder="Customer Name">
+  </div>
+
+  <!-- SAME AS BILLING -->
+  <div id="qItemsContainer"></div>
+
+  <button onclick="addQItemRow()">➕ Add Item</button>
+
+  <h3 id="qTotal"></h3>
+
+ 
+<input type="hidden" id="editQId">
+<button id="qBtn" onclick="addQuotation()">Create Quotation</button>
+  <div id="qList"></div>  
+</div>  
+  <!--                      AI                        -->
+<div id="ai" class="page">
+
+  <div class="ai-input-box">
+
+    <h2>🤖 Smart Shop AI Assistant</h2>
+
+    <textarea id="aiInput" placeholder="Ask anything about stock, bills, profit, workers..."></textarea>
+
+    <button onclick="askAI()">Ask AI</button>
+
+    <div id="aiResult"></div>
+
+  </div>
+
+</div>
+  
+<!-- ================= SETTINGS ================= -->
+<div id="settings" class="page">
+
+  <h2>⚙️ SETTINGS</h2>
+
+  <!-- 🏪 SHOP INFO SECTION -->
+  <div class="settings-card">
+
+    <h3>🏪 Shop Details</h3>
+
+    <label>Shop Name</label>
+    <input id="shopInput" placeholder="Enter shop name">
+
+    <label>Owner Phone</label>
+    <input id="ownerPhone" placeholder="Enter owner phone number">
+
+    <label>Shop Address</label>
+    <textarea id="shopAddress" placeholder="Enter full shop address"></textarea>
+
+    <button type="button" onclick="saveShop()">💾 Save Shop Details</button>
+
+  </div>
+
+  <h3>🎁 Create Offer</h3>
+
+<input id="offerName" placeholder="Offer Name">
+<textarea id="offerDesc" placeholder="Offer Description"></textarea>
+
+<input id="offerDiscount" placeholder="Discount %">
+<input id="offerApplicable" placeholder="Applicable on (e.g. Sweets, Snacks)">
+<input id="offerMin" placeholder="Minimum Purchase Amount">
+
+<label>Start Date</label>
+<input id="offerStart" type="date">
+
+<label>End Date</label>
+<input id="offerEnd" type="date">
+
+<button onclick="saveOffer()">Save Offer</button>
+
+</div>
+  
+</div>  
+</div>  
+  
+<script type="module" src="./app.js"></script>  
+</body>  
+</html>
